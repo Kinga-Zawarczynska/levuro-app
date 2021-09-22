@@ -7,7 +7,7 @@ import LoginPage from './components/LoginPage';
 function App() {
   return (
     <ErrorBoundary>
-      <Main />
+      {/* <Main /> */}
       <LoginPage />
     </ErrorBoundary>
   );
