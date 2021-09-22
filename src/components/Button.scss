@@ -1,0 +1,15 @@
+.button {
+    display: inline-block;
+    width: 20%;
+    box-sizing: content-box;
+    padding: 2px, 5px;
+    margin: 2%;
+    background-color: gray;
+    border-radius: 10px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.button:hover {
+    color: red;
+}
