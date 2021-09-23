@@ -1,5 +1,7 @@
-export async function login(url = '', data = {}) {
-    const response = await fetch(url, {
+import { login } from '../state-management/actions/userTokenActions'
+import { throwError, clearErrors } from '../state-management/actions/errorActions'
+export async function logIn(url = '', data = {}, dispatch) {
+    await fetch(url, {
       method: 'POST',
       mode: 'cors',
       cache: 'no-cache',
@@ -10,6 +12,16 @@ export async function login(url = '', data = {}) {
       redirect: 'follow',
       referrerPolicy: 'no-referrer',
       body: JSON.stringify(data)
-    });
-    return response.json();
+    })
+    .then(response => {
+        if (!response.ok) {
+            dispatch(throwError({error: 'login-failed', message: 'Something went wrong, try again.'}))
+        } else {
+            dispatch(clearErrors())
+            return response.json().then(data => {
+                localStorage.setItem('userToken', data.token)
+                data.token && dispatch(login(data.token))})
+        }
+    })
+    .catch(err => console.log(err));
   }

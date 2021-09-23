@@ -1,14 +1,17 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import ErrorBoundary from './ErrorBoundary';
 import Main from './components/Main'
-import './App.css';
 import LoginPage from './components/LoginPage';
+import './App.css';
+
 
 function App() {
+  const newUserLoggedIn = useSelector(({ user }) => user.isLoggedIn)
+  const userIsStillLoggedIn = localStorage.getItem('userToken')
   return (
     <ErrorBoundary>
-      {/* <Main /> */}
-      <LoginPage />
+      {newUserLoggedIn || userIsStillLoggedIn ? <Main /> : <LoginPage />}
     </ErrorBoundary>
   );
 }
