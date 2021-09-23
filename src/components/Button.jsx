@@ -1,7 +1,7 @@
 import React from 'react'
 import './Button.scss'
 
-function Button({name, type, disabled, onClick}) {
+function Button({name, disabled, onClick}) {
     return (
         <div className='button' disabled={disabled} onClick={onClick} >
             {name}
