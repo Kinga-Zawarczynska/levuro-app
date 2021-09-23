@@ -1,6 +1,12 @@
-export const fetchUsers = async () => {
+export const fetchUsers = async (token) => {
     let users = [];
-    let fetchedUsers = fetch('https://reqres.in/api/users')
+    let headers = {"Content-Type": "application/json"};
+    if (token) {
+      headers["Authorization"] = `Bearer: ${token}`;
+    }
+    let fetchedUsers = fetch('https://reqres.in/api/users', {
+      headers
+    })
         .then(successResponse => {
             if (successResponse.status !== 200) {
               return null;
