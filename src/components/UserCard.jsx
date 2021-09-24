@@ -1,10 +1,10 @@
 import React from 'react';
 import './UserCard.scss';
 
-function UserCard({ user }) {
+function UserCard({ user, onClick }) {
 	const { avatar, email, first_name, last_name, id } = user;
 	return (
-		<div id={id} className="card">
+		<div id={id} className="card" onClick={onClick}>
 			<img src={avatar} alt={email} className='img' />
 			<div>
 				<p>
