@@ -1,17 +1,23 @@
 import React, { Fragment } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
 import { Formik, Field, Form } from 'formik';
 import Input from './Input';
 import Button from './Button';
 import { logOut } from '../utils/logOut';
+import { addUser } from '../utils/add-user';
 import './UserForm.scss'
 import { UPDATE_USER, MAIN } from '../constants/flows';
 import { setFlow } from '../state-management/actions/flowActions';
+import { updateUser } from '../utils/update-user';
 
 function UserForm({ flow, user, setRememberedUserToken, setPath }) {
 	const dispatch = useDispatch();
+	const token = useSelector(({ user }) => user.token)
+	const userError = useSelector(({ error }) => error['user-failed']);
 	const myInput = (props) => <Input {...props} />;
+
+	const isUpdateFlow = flow === UPDATE_USER
 
 	const SignupSchema = Yup.object().shape({
 		firstName: Yup.string().required('Required'),
@@ -33,15 +39,15 @@ function UserForm({ flow, user, setRememberedUserToken, setPath }) {
 					email: user?.email || ''
 				}}
 				validationSchema={SignupSchema}
-				isInitialValid={flow === UPDATE_USER}
+				isInitialValid={isUpdateFlow}
 				validateOnMount
 				onSubmit={(values) => {
-					//  loginWithCredentials(values)
+					!isUpdateFlow ? addUser(token, values) : updateUser(token, values)
 				}}
 			>
 				{({ errors, touched, isValid, dirty }) => (
 					<Form className="form">
-						{/* {loginError && isValid && <div>{loginError}</div>} */}
+						{userError && isValid && <div>{userError}</div>}
 						<Field name="firstName" type="firstName" placeholder="firstName" component={myInput} />
 						{errors.firstName && touched.firstName ? <div>{errors.firstName}</div> : null}
 						<Field name="lastName" type="lastName" placeholder="lastName" component={myInput} />

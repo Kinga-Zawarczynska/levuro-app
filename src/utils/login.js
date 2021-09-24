@@ -1,7 +1,7 @@
 import { login } from '../state-management/actions/userTokenActions'
 import { throwError, clearErrors } from '../state-management/actions/errorActions'
-export async function logIn(url = '', data = {}, dispatch) {
-    await fetch(url, {
+export async function logIn(data = {}, dispatch) {
+    await fetch('https://reqres.in/api/login', {
       method: 'POST',
       mode: 'cors',
       cache: 'no-cache',
@@ -15,7 +15,7 @@ export async function logIn(url = '', data = {}, dispatch) {
     })
     .then(response => {
         if (!response.ok) {
-            dispatch(throwError({error: 'login-failed', message: 'Something went wrong, try again.'}))
+            dispatch(throwError({error: 'login-failed', message: 'Something went wrong, try to login again.'}))
         } else {
             dispatch(clearErrors())
             return response.json().then(data => {

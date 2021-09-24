@@ -10,7 +10,7 @@ function LoginPage() {
     const dispatch = useDispatch()
     const loginError = useSelector(({ error }) => error['login-failed']);
     const loginWithCredentials = ({email, password}) => {
-        logIn('https://reqres.in/api/login', {
+        logIn({
         email: email,
         password: password
     }, dispatch)}
