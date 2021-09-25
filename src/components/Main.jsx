@@ -6,9 +6,10 @@ import { fetchUsers } from '../utils/fetch-users';
 import { logOut } from '../utils/logOut';
 import { MAIN, NEW_USER, UPDATE_USER } from '../constants/flows';
 import { setFlow } from '../state-management/actions/flowActions';
-import './Main.scss';
+import { clearErrors } from '../state-management/actions/errorActions'
 import UserForm from './UserForm';
-import SearchBar from './SearchBar'
+import SearchBar from './SearchBar';
+import './Main.scss';
 
 function Main({ setRememberedUserToken }) {
   const [ users, setUsers ] = useState([]);
@@ -44,6 +45,10 @@ const infiniteScroll = () => {
     window.addEventListener('scroll', infiniteScroll);
     return () => window.removeEventListener('scroll', infiniteScroll);
   }, [page])
+
+  useEffect(() => {
+    dispatch(clearErrors())
+  }, [path])
 
   useEffect(() => {
     fetchUsers(userToken, page).then(fetchedUsers => setUsers(fetchedUsers[0].data)).then(setFlow(MAIN))

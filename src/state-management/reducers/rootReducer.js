@@ -6,7 +6,7 @@ import { flowReducer } from './flowReducer';
 const rootReducer = combineReducers({
     user: userReducer,
     error: errorReducer,
-    flow: flowReducer
+    flow: flowReducer,
 });
 
 export default rootReducer;

@@ -1,4 +1,4 @@
-import { throwError, clearErrors } from '../state-management/actions/errorActions'
+import { throwError, success } from '../state-management/actions/errorActions'
 export async function updateUser(token, userData = {}, dispatch) {
     let headers = {"Content-Type": "application/json"};
     if (token) {
@@ -18,7 +18,7 @@ export async function updateUser(token, userData = {}, dispatch) {
         if (!response.ok) {
             dispatch(throwError({error: 'user-failed', message: 'Something went wrong, try to update that user again.'}))
         } else {
-            dispatch(clearErrors())
+            dispatch(success({success: 'updated-user', message: 'User updated succesfully'}))
             return response.json()
         }
     })

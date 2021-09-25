@@ -6,17 +6,17 @@ import Input from './Input';
 import Button from './Button';
 import { logOut } from '../utils/logOut';
 import { addUser } from '../utils/add-user';
-import './UserForm.scss'
 import { UPDATE_USER, MAIN } from '../constants/flows';
 import { setFlow } from '../state-management/actions/flowActions';
 import { updateUser } from '../utils/update-user';
+import './UserForm.scss'
 
 function UserForm({ flow, user, setRememberedUserToken, setPath }) {
 	const dispatch = useDispatch();
 	const token = useSelector(({ user }) => user.token)
 	const userError = useSelector(({ error }) => error['user-failed']);
+	const userSuccess = useSelector(({ error }) => error['updated-user'] || error['add-user']);
 	const myInput = (props) => <Input {...props} />;
-
 	const isUpdateFlow = flow === UPDATE_USER
 
 	const SignupSchema = Yup.object().shape({
@@ -24,12 +24,14 @@ function UserForm({ flow, user, setRememberedUserToken, setPath }) {
 		lastName: Yup.string().required('Required'),
 		email: Yup.string().email('Invalid email').required('Required')
 	});
+
 	return (
 		<Fragment>
             <div className="buttons">
                 <Button name="BACK" onClick={() => {
 					setPath(MAIN)
-					dispatch(setFlow(MAIN))} }/>
+					dispatch(setFlow(MAIN))
+					}}/>
                 <Button name="LOGOUT" onClick={() => logOut(dispatch, setRememberedUserToken)} />
             </div>
 			<Formik
@@ -42,12 +44,13 @@ function UserForm({ flow, user, setRememberedUserToken, setPath }) {
 				isInitialValid={isUpdateFlow}
 				validateOnMount
 				onSubmit={(values) => {
-					!isUpdateFlow ? addUser(token, values) : updateUser(token, values, dispatch)
+					!isUpdateFlow ? addUser(token, values, dispatch) : updateUser(token, values, dispatch)
 				}}
 			>
 				{({ errors, touched, isValid, dirty }) => (
 					<Form className="form">
 						{userError && isValid && <div>{userError}</div>}
+						{userSuccess && <div>{userSuccess}</div>}
 						<Field name="firstName" type="firstName" placeholder="firstName" component={myInput} />
 						{errors.firstName && touched.firstName ? <div>{errors.firstName}</div> : null}
 						<Field name="lastName" type="lastName" placeholder="lastName" component={myInput} />

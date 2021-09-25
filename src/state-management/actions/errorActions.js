@@ -10,3 +10,10 @@ export const clearErrors = () => {
         type: "CLEAR_ERRORS",
     }
 };
+
+export const success = (payload) => {
+    return {
+        type: "SUCCESS",
+        payload
+    }
+};

@@ -8,6 +8,10 @@ export const errorReducer = function (state = initialState, action) {
           }
         case "CLEAR_ERRORS":
           return initialState;
+        case "SUCCESS":
+          return {
+            [action.payload.success]: action.payload.message
+          }
         default:
           return state;
       }
