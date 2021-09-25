@@ -1,10 +1,10 @@
-export const fetchUsers = async (token) => {
-    let users = [];
+export const fetchUsers = async (token, page) => {
+    let users = []
     let headers = {"Content-Type": "application/json"};
     if (token) {
       headers["Authorization"] = `Bearer: ${token}`;
     }
-    let fetchedUsers = fetch('https://reqres.in/api/users', {
+    let fetchedUsers = fetch(`https://reqres.in/api/users?page=${page}`, {
       headers
     })
         .then(successResponse => {

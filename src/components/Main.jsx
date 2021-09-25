@@ -16,22 +16,40 @@ function Main({ setRememberedUserToken }) {
   const flowState = useSelector(({flow}) => flow.path)
   const [path, setPath] = useState(flowState)
   const [updatedUser, setUpdatedUser] = useState()
+  const [page, setPage] = useState(1)
+  const [noMoreData, setNoMoreData] = useState(false)
   
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    setFlow(MAIN)
-  }, [])
+  const moreData = () => {
+    fetchUsers(userToken, page, users).then(res => {
+      setUsers(prev => [...prev, ...res[0].data]);
+      setPage(prev => prev +1)
+      if (!res[0].data.length) {
+        setNoMoreData(true)
+      }
+    });
+  }
 
-	useEffect(
-		() => {
-			fetchUsers(userToken).then((users) => setUsers(users[0].data));
-			return () => {
-				setUsers([]);
-			};
-		},
-		[ userToken ]
-  );
+// eslint-disable-next-line react-hooks/exhaustive-deps
+const infiniteScroll = () => {
+  if (
+    window.innerHeight + document.documentElement.scrollTop
+    === document.documentElement.offsetHeight
+  ) {
+    moreData()
+  }
+}
+
+  useEffect(() => {
+    window.addEventListener('scroll', infiniteScroll);
+    return () => window.removeEventListener('scroll', infiniteScroll);
+  }, [page])
+
+  useEffect(() => {
+    fetchUsers(userToken, page).then(fetchedUsers => setUsers(fetchedUsers[0].data)).then(setFlow(MAIN))
+    setPage(page + 1)
+  }, [])
 
   const redirectTo = (path, user) => {
     setPath(path)
@@ -55,7 +73,8 @@ function Main({ setRememberedUserToken }) {
 				<Input type="text" placeholder="search" />
 				<Button name="SEARCH" />
 			</div>
-			{users.map((item) => <UserCard user={item} key={item.id} onClick={() => redirectTo(UPDATE_USER, item)} />)}
+			{users?.map((item) => <UserCard user={item} key={`${item.id}${item.email}`} onClick={() => redirectTo(UPDATE_USER, item)} />)}
+      {noMoreData && <p>No more data available.</p>}
 		</main>
 	);
 }
