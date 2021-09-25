@@ -1,14 +1,14 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Button from './Button';
-import Input from './Input';
 import { fetchUsers } from '../utils/fetch-users';
-import UserCard from './UserCard';
 import { logOut } from '../utils/logOut';
 import { MAIN, NEW_USER, UPDATE_USER } from '../constants/flows';
 import { setFlow } from '../state-management/actions/flowActions';
 import './Main.scss';
 import UserForm from './UserForm';
+import SearchBar from './SearchBar'
 
 function Main({ setRememberedUserToken }) {
   const [ users, setUsers ] = useState([]);
@@ -31,7 +31,6 @@ function Main({ setRememberedUserToken }) {
     });
   }
 
-// eslint-disable-next-line react-hooks/exhaustive-deps
 const infiniteScroll = () => {
   if (
     window.innerHeight + document.documentElement.scrollTop
@@ -70,10 +69,8 @@ const infiniteScroll = () => {
 			<Button name="LOGOUT" onClick={() => logOut(dispatch, setRememberedUserToken)} />
 			<Button name="ADD NEW USER" onClick={() => redirectTo(NEW_USER)} />
 			<div className="search-bar">
-				<Input type="text" placeholder="search" />
-				<Button name="SEARCH" />
+				<SearchBar users={users} usersData={users} redirectTo={redirectTo} />
 			</div>
-			{users?.map((item) => <UserCard user={item} key={`${item.id}${item.email}`} onClick={() => redirectTo(UPDATE_USER, item)} />)}
       {noMoreData && <p>No more data available.</p>}
 		</main>
 	);

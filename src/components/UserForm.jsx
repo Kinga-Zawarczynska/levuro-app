@@ -42,7 +42,7 @@ function UserForm({ flow, user, setRememberedUserToken, setPath }) {
 				isInitialValid={isUpdateFlow}
 				validateOnMount
 				onSubmit={(values) => {
-					!isUpdateFlow ? addUser(token, values) : updateUser(token, values)
+					!isUpdateFlow ? addUser(token, values) : updateUser(token, values, dispatch)
 				}}
 			>
 				{({ errors, touched, isValid, dirty }) => (
